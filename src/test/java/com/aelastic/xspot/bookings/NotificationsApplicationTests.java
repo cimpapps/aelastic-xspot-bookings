@@ -1,4 +1,4 @@
-package com.aelastic.xspot.notifications;
+package com.aelastic.xspot.bookings;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
