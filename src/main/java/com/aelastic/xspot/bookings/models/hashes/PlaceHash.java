@@ -1,4 +1,4 @@
-package com.aelastic.xspot.bookings.models;
+package com.aelastic.xspot.bookings.models.hashes;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Place {
+public class PlaceHash {
 
 
     private String country;

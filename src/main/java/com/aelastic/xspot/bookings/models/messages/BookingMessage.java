@@ -1,6 +1,7 @@
-package com.aelastic.xspot.bookings.models;
+package com.aelastic.xspot.bookings.models.messages;
 
 
+import com.aelastic.xspot.bookings.models.BookingState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Booking implements Serializable {
+public class BookingMessage implements Serializable {
 
     private String userID;
 
