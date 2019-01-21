@@ -1,7 +1,9 @@
 package com.aelastic.xspot.bookings.models.request;
 
 
+import com.aelastic.xspot.bookings.models.Booking;
 import com.aelastic.xspot.bookings.models.BookingState;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,15 +20,7 @@ public class SaveBookingRequest implements Serializable {
 
     private String requestId;
 
-    private String userID;
-
-    private String placeID;
-
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
-
-    private int nrOfPeople;
+    private Booking booking;
 
 
 }

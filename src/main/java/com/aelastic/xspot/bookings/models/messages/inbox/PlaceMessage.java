@@ -1,4 +1,4 @@
-package com.aelastic.xspot.bookings.models.messages;
+package com.aelastic.xspot.bookings.models.messages.inbox;
 
 
 import lombok.AllArgsConstructor;

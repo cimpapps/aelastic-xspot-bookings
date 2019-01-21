@@ -1,4 +1,4 @@
-package com.aelastic.xspot.bookings.models.hashes;
+package com.aelastic.xspot.bookings.models.messages.outbox;
 
 
 import com.aelastic.xspot.bookings.models.BookingState;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingHash implements Serializable {
+public class BookingMessage implements Serializable {
 
     private String id;
 

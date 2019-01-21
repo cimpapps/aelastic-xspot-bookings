@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteBookingRequest {
+public class GetBookingsRequest{
 
-    private String requestId;
+    private int requestId;
 
-    private String bookingId;
+    private int nrOfPage;
 
-    private String userId;
+    private String startDate;
+
+    private String endDate;
 
 }
