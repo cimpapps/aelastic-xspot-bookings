@@ -14,8 +14,13 @@ public class PlaceHash {
 
 
     private String country;
+
     private String city;
+
+    private String name;
+
     private String placeId;
+
     private int totalNumberOfSeats;
 
 }

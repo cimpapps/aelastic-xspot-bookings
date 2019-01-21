@@ -1,4 +1,4 @@
-package com.aelastic.xspot.bookings.models.hashes;
+package com.aelastic.xspot.bookings.models.request;
 
 
 import com.aelastic.xspot.bookings.models.BookingState;
@@ -14,13 +14,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingHash implements Serializable {
+public class UpdateBookingRequest implements Serializable {
 
-    private String id;
+    private String requestId;
 
-    private String userID;
-
-    private String placeID;
+    private String bookingId;
 
     private LocalDateTime startDate;
 

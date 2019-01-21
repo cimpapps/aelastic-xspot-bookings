@@ -12,10 +12,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlaceMessage {
 
-
     private String country;
+
     private String city;
+
     private String placeId;
+
+    private String name;
+
     private int totalNumberOfSeats;
 
 }

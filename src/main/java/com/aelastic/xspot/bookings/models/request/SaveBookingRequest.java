@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingRequest implements Serializable {
+public class SaveBookingRequest implements Serializable {
+
+    private String requestId;
 
     private String userID;
 
@@ -26,6 +28,5 @@ public class BookingRequest implements Serializable {
 
     private int nrOfPeople;
 
-    private BookingState bookingState;
 
 }

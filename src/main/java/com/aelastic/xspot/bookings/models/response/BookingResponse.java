@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BookingResponse implements Serializable {
 
+    private String bookingId;
+
     private String userID;
 
     private String placeID;

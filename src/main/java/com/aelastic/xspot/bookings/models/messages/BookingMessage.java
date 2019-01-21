@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BookingMessage implements Serializable {
 
+    private String id;
+
     private String userID;
 
     private String placeID;
