@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController("/bookings")
+@RestController
+@RequestMapping("/bookings")
 public class BookingsController {
 
 
