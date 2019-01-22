@@ -29,25 +29,48 @@ public class BookingsController {
         this.bookingsService = bookingsService;
     }
 
-    @PostMapping(value = "", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Booking> saveBooking(@RequestBody @Valid SaveBookingRequest saveBookingRequest) {
-        Booking booking = bookingsService.saveBooking(saveBookingRequest);
-        return new ResponseEntity(booking, HttpStatus.CREATED);
+    @PostMapping(
+            value = "",
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Booking> saveBooking(@RequestHeader String requestId,
+            @RequestBody @Valid Booking booking) {
+        Booking savedBooking = bookingsService.saveBooking(SaveBookingRequest.builder()
+                .requestId(requestId)
+                .booking(booking)
+                .build());
+        return new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Booking> updateBooking(@RequestBody @Valid SaveBookingRequest updateBookingRequest) {
-        Booking booking = bookingsService.saveBooking(updateBookingRequest);
-        return ResponseEntity.ok(booking);
+
+    @PutMapping(
+            value = "",
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Booking> updateBooking(@RequestHeader String requestId,
+                                                 @RequestBody @Valid Booking booking) {
+        Booking savedBooking = bookingsService.saveBooking(SaveBookingRequest.builder()
+                .requestId(requestId)
+                .booking(booking)
+                .build());
+        return ResponseEntity.ok(savedBooking);
     }
 
-    @DeleteMapping(value = "", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "",
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<DeleteBookingResponse> deleteBooking(@RequestBody @Valid DeleteBookingRequest deleteBookingRequest) {
         DeleteBookingResponse deleteBookingResponse = bookingsService.deleteBooking(deleteBookingRequest);
         return ResponseEntity.ok(deleteBookingResponse);
     }
 
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = "/{id}",
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Booking> getBookingById(@RequestHeader String requestId, @PathVariable String id) {
         GetBookingByIdRequest bookingByIdRequest = GetBookingByIdRequest.builder()
                 .requestId(requestId)
@@ -56,10 +79,14 @@ public class BookingsController {
         return ResponseEntity.ok(booking);
     }
 
-    @GetMapping(value = "", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = "",
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<GetBookingsResponse> getBookings(
             @RequestHeader String requestId,
-            @RequestParam int nrOfPage,
+            @RequestParam int batchSize,
+            @RequestParam int batchNr,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
             @RequestParam(required = false) String placeId,
@@ -67,7 +94,8 @@ public class BookingsController {
 
         GetBookingsRequest getBookingsRequest = GetBookingsRequest.builder()
                 .requestId(requestId)
-                .nrOfPage(nrOfPage)
+                .batchSize(batchSize)
+                .batchNr(batchNr)
                 .startDate(startDate)
                 .endDate(endDate)
                 .userId(userId)

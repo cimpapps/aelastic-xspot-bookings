@@ -19,7 +19,10 @@ public class GetBookingsRequest{
     private String requestId;
 
     @NotNull
-    private int nrOfPage;
+    private int batchSize;
+
+    @NotNull
+    private int batchNr;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private String startDate;
