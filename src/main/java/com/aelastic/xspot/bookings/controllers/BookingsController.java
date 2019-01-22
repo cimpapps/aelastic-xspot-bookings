@@ -10,6 +10,8 @@ import com.aelastic.xspot.bookings.service.BookingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController("/bookings")
 public class BookingsController {
 
@@ -22,23 +24,23 @@ public class BookingsController {
     }
 
     @PostMapping("")
-    public Booking saveBooking(@RequestBody SaveBookingRequest saveBookingRequest) {
+    public Booking saveBooking(@RequestBody @Valid SaveBookingRequest saveBookingRequest) {
        return bookingsService.saveBooking(saveBookingRequest);
     }
 
     @PutMapping("")
-    public Booking updateBooking(@RequestBody SaveBookingRequest updateBookingRequest) {
+    public Booking updateBooking(@RequestBody @Valid SaveBookingRequest updateBookingRequest) {
         return bookingsService.saveBooking(updateBookingRequest);
     }
 
     @DeleteMapping("")
-    public DeleteBookingResponse deleteBooking(@RequestBody DeleteBookingRequest deleteBookingRequest) {
+    public DeleteBookingResponse deleteBooking(@RequestBody @Valid DeleteBookingRequest deleteBookingRequest) {
         return bookingsService.deleteBooking(deleteBookingRequest);
     }
 
     @GetMapping("/users/{userId}")
     public GetBookingsResponse getBookingsByUser(
-            @RequestBody GetBookingsRequest getBookingsRequest,
+            @RequestBody @Valid GetBookingsRequest getBookingsRequest,
             @PathVariable String userId)
     {
         return bookingsService.getBookingsByUser(userId, getBookingsRequest);
@@ -46,7 +48,7 @@ public class BookingsController {
 
     @GetMapping("/places/{placeId}")
     public GetBookingsResponse getBookingsByPlace(
-            @RequestBody GetBookingsRequest getBookingsRequest,
+            @RequestBody @Valid GetBookingsRequest getBookingsRequest,
             @PathVariable String placeId)
     {
         return bookingsService.getBookingsByPlace(placeId, getBookingsRequest);

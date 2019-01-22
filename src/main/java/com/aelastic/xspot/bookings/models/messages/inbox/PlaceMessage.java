@@ -22,4 +22,6 @@ public class PlaceMessage {
 
     private int totalNumberOfSeats;
 
+    //todo orar
+
 }

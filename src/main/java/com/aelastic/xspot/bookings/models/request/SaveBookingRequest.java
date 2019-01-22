@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,8 +19,10 @@ import java.time.LocalDateTime;
 @Builder
 public class SaveBookingRequest implements Serializable {
 
+    @NotNull
     private String requestId;
 
+    @NotNull
     private Booking booking;
 
 
