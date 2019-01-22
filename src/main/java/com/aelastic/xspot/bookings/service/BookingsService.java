@@ -1,6 +1,7 @@
 package com.aelastic.xspot.bookings.service;
 
 import com.aelastic.xspot.bookings.models.request.DeleteBookingRequest;
+import com.aelastic.xspot.bookings.models.request.GetBookingByIdRequest;
 import com.aelastic.xspot.bookings.models.request.GetBookingsRequest;
 import com.aelastic.xspot.bookings.models.request.SaveBookingRequest;
 import com.aelastic.xspot.bookings.models.Booking;
@@ -25,6 +26,14 @@ public class BookingsService {
     }
 
     public DeleteBookingResponse deleteBooking(DeleteBookingRequest deleteBookingRequest) {
+        return null;
+    }
+
+    public GetBookingsResponse getBookings(GetBookingsRequest getBookingsRequest) {
+        return null;
+    }
+
+    public Booking getBookingById(GetBookingByIdRequest id) {
         return null;
     }
 }

@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class GetBookingsRequest{
 
     @NotNull
-    private int requestId;
+    private String requestId;
 
     @NotNull
     private int nrOfPage;
@@ -26,5 +26,11 @@ public class GetBookingsRequest{
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private String endDate;
+
+    private String userId;
+
+    private String placeId;
+
+
 
 }
