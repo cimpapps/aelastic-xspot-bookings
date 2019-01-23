@@ -1,7 +1,5 @@
 package com.aelastic.xspot.bookings.permissions;
 
-import org.springframework.transaction.annotation.Transactional;
-
 public class Permissions {
 
     Permission ownerPermissions;

@@ -1,7 +1,8 @@
-package com.aelastic.xspot.bookings.models;
+package com.aelastic.xspot.bookings.models.dto;
 
 
 import com.aelastic.xspot.bookings.models.BookingState;
+import com.aelastic.xspot.bookings.models.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +13,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Booking implements Serializable {
+public class BookingDto implements Serializable {
 
     @NotNull
     @NotEmpty
@@ -33,11 +33,11 @@ public class Booking implements Serializable {
     @NotEmpty
     private String placeID;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime startDate;
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:00")
+    private String startDate;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime endDate;
+    @DateTimeFormat(pattern = Constants.DATE_FORMAT)
+    private String endDate;
 
     @NotNull
     @Positive
