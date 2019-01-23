@@ -25,11 +25,11 @@ public class BookingDao implements Serializable {
 
     @NotNull
     @NotEmpty
-    private String userID;
+    private String userId;
 
     @NotNull
     @NotEmpty
-    private String placeID;
+    private String placeId;
 
     private LocalDateTime startDate;
 

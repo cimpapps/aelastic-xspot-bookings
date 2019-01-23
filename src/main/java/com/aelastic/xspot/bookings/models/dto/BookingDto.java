@@ -27,11 +27,11 @@ public class BookingDto implements Serializable {
 
     @NotNull
     @NotEmpty
-    private String userID;
+    private String userId;
 
     @NotNull
     @NotEmpty
-    private String placeID;
+    private String placeId;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:00")
     private String startDate;
