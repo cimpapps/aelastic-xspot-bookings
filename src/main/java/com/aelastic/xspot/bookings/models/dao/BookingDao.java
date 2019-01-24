@@ -1,10 +1,13 @@
 package com.aelastic.xspot.bookings.models.dao;
 
 import com.aelastic.xspot.bookings.models.BookingState;
+import com.aelastic.xspot.bookings.models.messages.outbox.BookingMessage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,12 +16,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+@Document
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingDao implements Serializable {
+public class BookingDao implements Serializable, BookingMessage {
 
+    @Id
     @NotNull
     @NotEmpty
     private String bookingId;
@@ -31,8 +36,10 @@ public class BookingDao implements Serializable {
     @NotEmpty
     private String placeId;
 
+    @NotNull
     private LocalDateTime startDate;
 
+    @NotNull
     private LocalDateTime endDate;
 
     @NotNull

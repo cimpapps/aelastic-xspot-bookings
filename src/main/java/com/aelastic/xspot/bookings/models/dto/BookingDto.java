@@ -3,6 +3,7 @@ package com.aelastic.xspot.bookings.models.dto;
 
 import com.aelastic.xspot.bookings.models.BookingState;
 import com.aelastic.xspot.bookings.models.Constants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +34,7 @@ public class BookingDto implements Serializable {
     @NotEmpty
     private String placeId;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:00")
+    @DateTimeFormat(pattern = Constants.DATE_FORMAT)
     private String startDate;
 
     @DateTimeFormat(pattern = Constants.DATE_FORMAT)

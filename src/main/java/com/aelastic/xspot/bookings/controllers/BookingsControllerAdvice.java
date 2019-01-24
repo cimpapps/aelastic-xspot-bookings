@@ -12,13 +12,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 @RestControllerAdvice
-public class BookingsControllerAdivce extends ResponseEntityExceptionHandler {
+public class BookingsControllerAdvice extends ResponseEntityExceptionHandler {
 
 
     public static final String VALIDATION_FAILED = "Validation failed";
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
             ErrorDetailsResponse errorDetails = ErrorDetailsResponse.builder()
                     .date(new Date())
                     .message(VALIDATION_FAILED)

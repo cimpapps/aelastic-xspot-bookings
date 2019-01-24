@@ -11,7 +11,7 @@ public class BookingMapper {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
 
-    public static BookingDto toDto(BookingDao dao) {
+    public static BookingDto fromDao2Dto(BookingDao dao) {
 
         String startDate = dao.getStartDate().format(DATE_TIME_FORMATTER);
         String endDate = dao.getEndDate().format(DATE_TIME_FORMATTER);
@@ -28,7 +28,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public static BookingDao toDao(BookingDto dto) {
+    public static BookingDao fromDto2Dao(BookingDto dto) {
 
         LocalDateTime startDate = LocalDateTime.parse(dto.getStartDate(), DATE_TIME_FORMATTER);
         LocalDateTime endDate = LocalDateTime.parse(dto.getEndDate(), DATE_TIME_FORMATTER);
