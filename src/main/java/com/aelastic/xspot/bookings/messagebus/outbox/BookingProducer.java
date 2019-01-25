@@ -23,7 +23,7 @@ public class BookingProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void saveBooking(BookingMessage bookingMessage) {
+    public void publishBooking(BookingMessage bookingMessage) {
         ProducerRecord record = new ProducerRecord<String, BookingMessage>(registerUserTopic, bookingMessage);
         kafkaTemplate.send(record);
     }

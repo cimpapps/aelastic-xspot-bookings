@@ -25,5 +25,4 @@ public class PlaceDao {
 
     private int totalNumberOfSeats;
 
-    private int nrOfSeatsReserved;
 }

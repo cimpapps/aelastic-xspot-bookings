@@ -51,7 +51,7 @@ public class BookingsController {
     )
     public ResponseEntity<BookingDto> updateBooking(@RequestHeader String requestId,
                                                     @RequestBody @Valid BookingDto booking) {
-        BookingDto savedBooking = bookingsService.saveBooking(SaveBookingRequest.builder()
+        BookingDto savedBooking = bookingsService.updateBooking(SaveBookingRequest.builder()
                 .requestId(requestId)
                 .booking(booking)
                 .build());

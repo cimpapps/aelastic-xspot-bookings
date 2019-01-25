@@ -1,7 +1,9 @@
 package com.aelastic.xspot.bookings.service;
 
+import com.aelastic.xspot.bookings.messagebus.outbox.BookingProducer;
 import com.aelastic.xspot.bookings.models.BookingState;
 import com.aelastic.xspot.bookings.models.dao.BookingDao;
+import com.aelastic.xspot.bookings.models.dao.PlaceDao;
 import com.aelastic.xspot.bookings.models.dto.BookingDto;
 import com.aelastic.xspot.bookings.models.mappers.BookingMapper;
 import com.aelastic.xspot.bookings.models.request.DeleteBookingRequest;
@@ -16,38 +18,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ValidationException;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class BookingsService {
 
 
     private BookingsRepository bookingsRepository;
     private PlacesRepository placesRepository;
+    private BookingProducer bookingProducer;
 
     @Autowired
-    public BookingsService(BookingsRepository bookingsRepository, PlacesRepository placesRepository) {
+    public BookingsService(BookingsRepository bookingsRepository,
+                           PlacesRepository placesRepository,
+                           BookingProducer bookingProducer) {
         this.bookingsRepository = bookingsRepository;
         this.placesRepository = placesRepository;
+        this.bookingProducer = bookingProducer;
     }
 
     @Transactional
     public BookingDto saveBooking(SaveBookingRequest saveBookingRequest) {
         BookingDto booking = saveBookingRequest.getBooking();
 
-        //TODO save in kafka...
+        int totalSeats = getTotalNumberOfSeats(booking.getPlaceId());
+        int requestedSeats = booking.getNrOfPeople();
+        if (totalSeats - requestedSeats < 0) {
+            throw new ValidationException("Number of participants bigger than capacity");
+        }
 
-        processAvailability(booking);
+        int numberOfSeatsAvailable = getNumberOfSeatsAvailable(booking, totalSeats);
+
+        BookingDao bookingDao = BookingMapper.fromDto2Dao(booking);
+        if (numberOfSeatsAvailable - requestedSeats >= 0) {
+            bookingDao.setBookingState(BookingState.CONFIRMED);
+        } else {
+            //TODO to implement an algorithm to determine how long should be the waiting list
+            bookingDao.setBookingState(BookingState.ON_WAITING_LIST);
+        }
 
         BookingDao save = bookingsRepository.save(BookingMapper.fromDto2Dao(booking));
 
+        bookingProducer.publishBooking(save);
 
         return BookingMapper.fromDao2Dto(save);
     }
 
-    private BookingState processAvailability(BookingDto booking) {
-        //TODO implement
-        //use kafka streams to get availability by time(use windowing)
-        //or discuss other solutions
-        return null;
+    private List<BookingDao> getAllBookingsInTimeFrame(String placeId, LocalDateTime startDate, LocalDateTime endDate) {
+        return bookingsRepository.findAllBookingsInTimeFrame(placeId, startDate, endDate)
+                .orElse(Collections.emptyList());
     }
 
 
@@ -62,4 +84,33 @@ public class BookingsService {
     public BookingDto getBookingById(GetBookingByIdRequest id) {
         return null;
     }
+
+    public BookingDto updateBooking(SaveBookingRequest build) {
+        return null;
+    }
+
+
+    private int getNumberOfSeatsAvailable(BookingDto booking, int totalSeats) {
+
+        BookingDao dao = BookingMapper.fromDto2Dao(booking);
+
+        String placeId = dao.getPlaceId();
+
+        List<BookingDao> bookings = getAllBookingsInTimeFrame(placeId, dao.getStartDate(), dao.getEndDate());
+
+        int reservedSeats = (int) bookings.stream()
+                .filter(b -> BookingState.CONFIRMED.equals(b.getBookingState()))
+                .count();
+
+        return totalSeats - reservedSeats;
+
+    }
+
+
+    private int getTotalNumberOfSeats(String placeId) {
+        return placesRepository.findById(placeId)
+                .map(PlaceDao::getTotalNumberOfSeats)
+                .orElse(0);
+    }
+
 }
