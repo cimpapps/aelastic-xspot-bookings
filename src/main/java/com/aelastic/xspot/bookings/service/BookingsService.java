@@ -50,9 +50,11 @@ public class BookingsService {
             throw new ValidationException("Number of participants bigger than capacity");
         }
 
-        int numberOfSeatsAvailable = getNumberOfSeatsAvailable(booking, totalSeats);
-
         BookingDao bookingDao = BookingMapper.fromDto2Dao(booking);
+        List<BookingDao> bookingsInTimeFrame = getBookingsInTimeFrame(bookingDao);
+
+        int numberOfSeatsAvailable = totalSeats - getNumberOfSeatReserved(booking, bookingsInTimeFrame);
+
         if (numberOfSeatsAvailable - requestedSeats >= 0) {
             bookingDao.setBookingState(BookingState.CONFIRMED);
         } else {
@@ -90,20 +92,16 @@ public class BookingsService {
     }
 
 
-    private int getNumberOfSeatsAvailable(BookingDto booking, int totalSeats) {
+    private int getNumberOfSeatReserved(BookingDto booking, List<BookingDao> bookingsInTimeFrame) {
 
-        BookingDao dao = BookingMapper.fromDto2Dao(booking);
-
-        String placeId = dao.getPlaceId();
-
-        List<BookingDao> bookings = getAllBookingsInTimeFrame(placeId, dao.getStartDate(), dao.getEndDate());
-
-        int reservedSeats = (int) bookings.stream()
+        return (int) bookingsInTimeFrame.stream()
                 .filter(b -> BookingState.CONFIRMED.equals(b.getBookingState()))
                 .count();
 
-        return totalSeats - reservedSeats;
+    }
 
+    private List<BookingDao> getBookingsInTimeFrame(BookingDao dao) {
+        return getAllBookingsInTimeFrame(dao.getPlaceId(), dao.getStartDate(), dao.getEndDate());
     }
 
 
