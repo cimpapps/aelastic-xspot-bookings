@@ -1,6 +1,6 @@
 package com.aelastic.xspot.bookings.controllers;
 
-import com.aelastic.xspot.bookings.models.dto.BookingDto;
+import com.aelastic.xspot.bookings.models.dao.Booking;
 import com.aelastic.xspot.bookings.models.request.DeleteBookingRequest;
 import com.aelastic.xspot.bookings.models.request.GetBookingByIdRequest;
 import com.aelastic.xspot.bookings.models.request.GetBookingsRequest;
@@ -34,9 +34,9 @@ public class BookingsController {
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<BookingDto> saveBooking(@RequestHeader String requestId,
-                                                  @RequestBody @Valid BookingDto booking) {
-        BookingDto savedBooking = bookingsService.saveBooking(SaveBookingRequest.builder()
+    public ResponseEntity<Booking> saveBooking(@RequestHeader String requestId,
+                                               @RequestBody @Valid Booking booking) {
+        Booking savedBooking = bookingsService.saveBooking(SaveBookingRequest.builder()
                 .requestId(requestId)
                 .booking(booking)
                 .build());
@@ -49,9 +49,9 @@ public class BookingsController {
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<BookingDto> updateBooking(@RequestHeader String requestId,
-                                                    @RequestBody @Valid BookingDto booking) {
-        BookingDto savedBooking = bookingsService.updateBooking(SaveBookingRequest.builder()
+    public ResponseEntity<Booking> updateBooking(@RequestHeader String requestId,
+                                                 @RequestBody @Valid Booking booking) {
+        Booking savedBooking = bookingsService.updateBooking(SaveBookingRequest.builder()
                 .requestId(requestId)
                 .booking(booking)
                 .build());
@@ -71,11 +71,11 @@ public class BookingsController {
             value = "/{id}",
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<BookingDto> getBookingById(@RequestHeader String requestId, @PathVariable String id) {
+    public ResponseEntity<Booking> getBookingById(@RequestHeader String requestId, @PathVariable String id) {
         GetBookingByIdRequest bookingByIdRequest = GetBookingByIdRequest.builder()
                 .requestId(requestId)
                 .id(id).build();
-        BookingDto booking = bookingsService.getBookingById(bookingByIdRequest);
+        Booking booking = bookingsService.getBookingById(bookingByIdRequest);
         return ResponseEntity.ok(booking);
     }
 

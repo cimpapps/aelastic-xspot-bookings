@@ -1,7 +1,7 @@
 package com.aelastic.xspot.bookings.models.request;
 
 
-import com.aelastic.xspot.bookings.models.dto.BookingDto;
+import com.aelastic.xspot.bookings.models.dao.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class SaveBookingRequest implements Serializable {
     private String requestId;
 
     @NotNull
-    private BookingDto booking;
+    private Booking booking;
 
 
 }

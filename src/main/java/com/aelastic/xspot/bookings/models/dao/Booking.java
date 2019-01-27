@@ -1,7 +1,6 @@
 package com.aelastic.xspot.bookings.models.dao;
 
 import com.aelastic.xspot.bookings.models.BookingState;
-import com.aelastic.xspot.bookings.models.messages.outbox.BookingMessage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookingDao implements Serializable, BookingMessage {
+public class Booking implements Serializable {
 
     @Id
     @NotNull

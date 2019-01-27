@@ -1,6 +1,6 @@
 package com.aelastic.xspot.bookings.models.response;
 
-import com.aelastic.xspot.bookings.models.dto.BookingDto;
+import com.aelastic.xspot.bookings.models.dao.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +15,5 @@ import java.util.List;
 public class GetBookingsResponse {
 
     private int requestId;
-    private List<BookingDto> bookings;
+    private List<Booking> bookings;
 }

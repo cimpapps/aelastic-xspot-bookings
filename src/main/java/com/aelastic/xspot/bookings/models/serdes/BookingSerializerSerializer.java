@@ -1,12 +1,12 @@
 package com.aelastic.xspot.bookings.models.serdes;
 
-import com.aelastic.xspot.bookings.models.messages.outbox.BookingMessage;
+import com.aelastic.xspot.bookings.models.dao.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class BookingSerializerSerializer implements Serializer<BookingMessage> {
+public class BookingSerializerSerializer implements Serializer<Booking> {
 
 
     @Override
@@ -15,7 +15,7 @@ public class BookingSerializerSerializer implements Serializer<BookingMessage> {
     }
 
     @Override
-    public byte[] serialize(String topic, BookingMessage data) {
+    public byte[] serialize(String topic, Booking data) {
         byte[] retVal = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
