@@ -1,6 +1,7 @@
 package com.aelastic.xspot.bookings.messagebus.outbox;
 
 import com.aelastic.xspot.bookings.models.dao.Booking;
+import com.aelastic.xspot.bookings.models.request.SaveBookingRequest;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +24,8 @@ public class BookingProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void publishBooking(Booking bookingMessage) {
-        ProducerRecord record = new ProducerRecord<String, Booking>(registerUserTopic, bookingMessage);
+    public void publishBooking(SaveBookingRequest bookingMessage) {
+        ProducerRecord record = new ProducerRecord<String, SaveBookingRequest>(registerUserTopic, bookingMessage);
         kafkaTemplate.send(record);
     }
 

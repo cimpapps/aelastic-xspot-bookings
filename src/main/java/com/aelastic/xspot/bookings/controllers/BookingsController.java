@@ -9,6 +9,7 @@ import com.aelastic.xspot.bookings.models.response.DeleteBookingResponse;
 import com.aelastic.xspot.bookings.models.response.GetBookingsResponse;
 import com.aelastic.xspot.bookings.service.BookingsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class BookingsController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Booking> updateBooking(@RequestHeader String requestId,
-                                                 @RequestBody @Valid Booking booking) {
+                                                 @RequestBody @Valid Booking booking) throws ChangeSetPersister.NotFoundException {
         Booking savedBooking = bookingsService.updateBooking(SaveBookingRequest.builder()
                 .requestId(requestId)
                 .booking(booking)

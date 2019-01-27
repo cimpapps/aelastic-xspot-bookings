@@ -1,25 +1,25 @@
 package com.aelastic.xspot.bookings.messagebus.inbox;
 
-import com.aelastic.xspot.bookings.models.dao.Place;
-import com.aelastic.xspot.bookings.service.PlacesServices;
+import com.aelastic.xspot.bookings.models.dao.Table;
+import com.aelastic.xspot.bookings.service.TablesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 
 public class PlacesConsumer {
 
-    private PlacesServices placesServices;
+    private TablesService tablesService;
 
 
     @Autowired
-    public PlacesConsumer(PlacesServices placesServices) {
-        this.placesServices = placesServices;
+    public PlacesConsumer(TablesService tablesService) {
+        this.tablesService = tablesService;
     }
 
     @KafkaListener(topics = "${save_place_topic}")
-    public void listenWithHeaders(@Payload Place placeMessage) {
+    public void listenWithHeaders(@Payload Table tableMessage) {
 
-        placesServices.savePlace(placeMessage);
+        tablesService.savePlace(tableMessage);
 
     }
 

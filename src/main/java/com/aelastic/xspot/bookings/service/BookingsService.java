@@ -7,6 +7,7 @@ import com.aelastic.xspot.bookings.models.request.GetBookingsRequest;
 import com.aelastic.xspot.bookings.models.request.SaveBookingRequest;
 import com.aelastic.xspot.bookings.models.response.DeleteBookingResponse;
 import com.aelastic.xspot.bookings.models.response.GetBookingsResponse;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +15,7 @@ public interface BookingsService {
 
     Booking saveBooking(SaveBookingRequest build);
 
-    Booking updateBooking(SaveBookingRequest build);
+    Booking updateBooking(SaveBookingRequest build) throws ChangeSetPersister.NotFoundException;
 
     DeleteBookingResponse deleteBooking(DeleteBookingRequest deleteBookingRequest);
 
