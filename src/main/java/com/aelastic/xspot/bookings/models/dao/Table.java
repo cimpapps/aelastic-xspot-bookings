@@ -25,4 +25,5 @@ public class Table {
     private int capacity;
 
     private String sector;
+
 }

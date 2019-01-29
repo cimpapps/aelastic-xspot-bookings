@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Booking implements Serializable {
+public class Booking implements Serializable, Cloneable {
 
     @Id
     @NotNull
@@ -36,6 +36,10 @@ public class Booking implements Serializable {
     private String placeId;
 
     @NotNull
+    @NotEmpty
+    private String tableId;
+
+    @NotNull
     private LocalDateTime startDate;
 
     @NotNull
@@ -48,5 +52,15 @@ public class Booking implements Serializable {
     private Set<String> friends;
 
     private BookingState bookingState;
+
+    @Override
+    public Booking clone() {
+        try {
+            return (Booking) super.clone();
+        } catch (CloneNotSupportedException e){
+            return new Booking();
+        }
+
+    }
 
 }
