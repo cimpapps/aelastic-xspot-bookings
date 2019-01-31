@@ -13,6 +13,6 @@ public class GetBookingByIdRequest {
 
     private String requestId;
 
-    private String id;
+    private String bookingId;
 
 }

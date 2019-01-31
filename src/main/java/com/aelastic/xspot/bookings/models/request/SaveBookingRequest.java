@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -20,6 +21,7 @@ public class SaveBookingRequest implements Serializable {
     private String requestId;
 
     @NotNull
+    @Valid
     private Booking booking;
 
 

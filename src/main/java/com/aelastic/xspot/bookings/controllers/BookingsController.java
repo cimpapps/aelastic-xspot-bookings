@@ -75,7 +75,7 @@ public class BookingsController {
     public ResponseEntity<Booking> getBookingById(@RequestHeader String requestId, @PathVariable String id) {
         GetBookingByIdRequest bookingByIdRequest = GetBookingByIdRequest.builder()
                 .requestId(requestId)
-                .id(id).build();
+                .bookingId(id).build();
         Booking booking = bookingsService.getBookingById(bookingByIdRequest);
         return ResponseEntity.ok(booking);
     }
