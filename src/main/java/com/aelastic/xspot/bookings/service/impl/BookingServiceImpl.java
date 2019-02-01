@@ -14,7 +14,6 @@ import com.aelastic.xspot.bookings.repo.MongoBookingRepo;
 import com.aelastic.xspot.bookings.repo.TableRepository;
 import com.aelastic.xspot.bookings.service.BookingsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Service
 public class BookingServiceImpl implements BookingsService {
@@ -54,14 +55,13 @@ public class BookingServiceImpl implements BookingsService {
 
         bookingRequest.setBooking(save);
 
-        processSaveBookingRequest(bookingRequest);
+        runAsync(() -> processSaveBookingRequest(bookingRequest));
 
         return save;
     }
 
 
-    @Async
-    protected void processSaveBookingRequest(@NotNull final SaveBookingRequest bookingRequest) {
+    private void processSaveBookingRequest(@NotNull final SaveBookingRequest bookingRequest) {
         Booking booking = bookingRequest.getBooking();
         List<Table> tables = mongoTableRepo.findTableByPlaceIdAndCapacityGreaterThanEqual(
                 booking.getPlaceId(),
@@ -98,7 +98,7 @@ public class BookingServiceImpl implements BookingsService {
 
         booking.ifPresent(b -> {
             mongoBookingRepo.deleteById(b.getBookingId());
-            refreshWaitingList(b);
+            runAsync(() -> refreshWaitingList(b));
         });
         return DeleteBookingResponse.builder()
                 .success(true)
@@ -120,10 +120,8 @@ public class BookingServiceImpl implements BookingsService {
     }
 
 
-    @Async
-    protected void refreshWaitingList(Booking deletedBooking) {
-
-        //TODO implement
+    private void refreshWaitingList(Booking deletedBooking) {
+        //TODO
 
     }
 
@@ -134,7 +132,7 @@ public class BookingServiceImpl implements BookingsService {
         Predicate<Booking> isOverlapping = b ->
                 (b.getStartDate().isBefore(endDate) && b.getStartDate().isAfter(startDate))
                         || (b.getEndDate().isAfter(startDate) && b.getEndDate().isBefore(endDate)
-                || (b.getStartDate().isBefore(startDate) && b.getEndDate().isAfter(endDate)));
+                        || (b.getStartDate().isBefore(startDate) && b.getEndDate().isAfter(endDate)));
 
 
         //TODO after date...
