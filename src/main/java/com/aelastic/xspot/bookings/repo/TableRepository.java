@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MongoTableRepo extends MongoRepository<Table, String> {
+public interface TableRepository extends MongoRepository<Table, String> {
 
     List<Table> findTableByPlaceIdAndCapacityGreaterThanEqual(String placeId, int capacity);
 

@@ -11,7 +11,7 @@ import com.aelastic.xspot.bookings.models.request.SaveBookingRequest;
 import com.aelastic.xspot.bookings.models.response.DeleteBookingResponse;
 import com.aelastic.xspot.bookings.models.response.GetBookingsResponse;
 import com.aelastic.xspot.bookings.repo.MongoBookingRepo;
-import com.aelastic.xspot.bookings.repo.MongoTableRepo;
+import com.aelastic.xspot.bookings.repo.TableRepository;
 import com.aelastic.xspot.bookings.service.BookingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -31,12 +31,12 @@ public class BookingServiceImpl implements BookingsService {
 
     private BookingProducer bookingProducer;
 
-    private MongoTableRepo mongoTableRepo;
+    private TableRepository mongoTableRepo;
 
     @Autowired
     public BookingServiceImpl(MongoBookingRepo mongoBookingRepo,
                               BookingProducer bookingProducer,
-                              MongoTableRepo mongoTableRepo) {
+                              TableRepository mongoTableRepo) {
         this.mongoBookingRepo = mongoBookingRepo;
         this.bookingProducer = bookingProducer;
         this.mongoTableRepo = mongoTableRepo;

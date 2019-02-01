@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Document
+@Document(collection = "bookings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
