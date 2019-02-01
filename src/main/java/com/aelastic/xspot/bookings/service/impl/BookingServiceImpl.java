@@ -11,8 +11,8 @@ import com.aelastic.xspot.bookings.models.request.SaveBookingRequest;
 import com.aelastic.xspot.bookings.models.response.DeleteBookingResponse;
 import com.aelastic.xspot.bookings.models.response.GetBookingsResponse;
 import com.aelastic.xspot.bookings.repo.MongoBookingRepo;
-import com.aelastic.xspot.bookings.repo.TableRepository;
 import com.aelastic.xspot.bookings.service.BookingsService;
+import com.aelastic.xspot.bookings.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,15 +32,15 @@ public class BookingServiceImpl implements BookingsService {
 
     private BookingProducer bookingProducer;
 
-    private TableRepository mongoTableRepo;
+    private TableService tableService;
 
     @Autowired
     public BookingServiceImpl(MongoBookingRepo mongoBookingRepo,
                               BookingProducer bookingProducer,
-                              TableRepository mongoTableRepo) {
+                              TableService tableService) {
         this.mongoBookingRepo = mongoBookingRepo;
         this.bookingProducer = bookingProducer;
-        this.mongoTableRepo = mongoTableRepo;
+        this.tableService = tableService;
     }
 
 
@@ -63,7 +63,7 @@ public class BookingServiceImpl implements BookingsService {
 
     private void processSaveBookingRequest(@NotNull final SaveBookingRequest bookingRequest) {
         Booking booking = bookingRequest.getBooking();
-        List<Table> tables = mongoTableRepo.findTableByPlaceIdAndCapacityGreaterThanEqual(
+        List<Table> tables = tableService.findByPlaceAndCapacity(
                 booking.getPlaceId(),
                 booking.getNrOfPeople());
 
