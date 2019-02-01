@@ -10,7 +10,7 @@ import com.aelastic.xspot.bookings.models.request.GetBookingsRequest;
 import com.aelastic.xspot.bookings.models.request.SaveBookingRequest;
 import com.aelastic.xspot.bookings.models.response.DeleteBookingResponse;
 import com.aelastic.xspot.bookings.models.response.GetBookingsResponse;
-import com.aelastic.xspot.bookings.repo.MongoBookingRepo;
+import com.aelastic.xspot.bookings.repo.BookingRepository;
 import com.aelastic.xspot.bookings.service.BookingsService;
 import com.aelastic.xspot.bookings.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +21,23 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Service
 public class BookingServiceImpl implements BookingsService {
 
-    private MongoBookingRepo mongoBookingRepo;
+    private BookingRepository bookingRepository;
 
     private BookingProducer bookingProducer;
 
     private TableService tableService;
 
     @Autowired
-    public BookingServiceImpl(MongoBookingRepo mongoBookingRepo,
+    public BookingServiceImpl(BookingRepository bookingRepository,
                               BookingProducer bookingProducer,
                               TableService tableService) {
-        this.mongoBookingRepo = mongoBookingRepo;
+        this.bookingRepository = bookingRepository;
         this.bookingProducer = bookingProducer;
         this.tableService = tableService;
     }
@@ -51,7 +50,7 @@ public class BookingServiceImpl implements BookingsService {
 
         booking.setBookingState(BookingState.REQUESTED);
 
-        @NotNull Booking save = mongoBookingRepo.save(booking);
+        @NotNull Booking save = bookingRepository.save(booking);
 
         bookingRequest.setBooking(save);
 
@@ -68,7 +67,7 @@ public class BookingServiceImpl implements BookingsService {
                 booking.getNrOfPeople());
 
         tables.stream()
-                .filter(t -> !isBooked(t, booking.getStartDate(), booking.getEndDate()))
+                .filter(t -> !isBooked(t, booking))
                 .findFirst()
                 .ifPresentOrElse(t -> {
                             booking.setTableId(t.getId());
@@ -94,10 +93,10 @@ public class BookingServiceImpl implements BookingsService {
 
         @NotNull String bookingId = deleteBookingRequest.getBookingId();
 
-        Optional<Booking> booking = mongoBookingRepo.findById(bookingId);
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
 
         booking.ifPresent(b -> {
-            mongoBookingRepo.deleteById(b.getBookingId());
+            bookingRepository.deleteById(b.getBookingId());
             runAsync(() -> refreshWaitingList(b));
         });
         return DeleteBookingResponse.builder()
@@ -110,7 +109,7 @@ public class BookingServiceImpl implements BookingsService {
     @Override
     public Booking getBookingById(GetBookingByIdRequest bookingByIdRequest) {
         String id = bookingByIdRequest.getBookingId();
-        return mongoBookingRepo.findById(id).get();
+        return bookingRepository.findById(id).get();
     }
 
     @Override
@@ -126,21 +125,28 @@ public class BookingServiceImpl implements BookingsService {
     }
 
 
-    private boolean isBooked(Table t, LocalDateTime startDate, LocalDateTime endDate) {
+    protected boolean isBooked(Table t, Booking requestedBooking) {
         String id = t.getId();
         String placeId = t.getPlaceId();
-        Predicate<Booking> isOverlapping = b ->
-                (b.getStartDate().isBefore(endDate) && b.getStartDate().isAfter(startDate))
-                        || (b.getEndDate().isAfter(startDate) && b.getEndDate().isBefore(endDate)
-                        || (b.getStartDate().isBefore(startDate) && b.getEndDate().isAfter(endDate)));
-
 
         //TODO after date...
-        return mongoBookingRepo.findAllByTableIdAndPlaceId(id, placeId)
-                .filter(isOverlapping)
+        return bookingRepository.findAllByTableIdAndPlaceId(id, placeId)
+                .filter(existingBooking -> areOverlapping(existingBooking, requestedBooking))
                 .findFirst()
                 .map(b -> false)
                 .orElse(true);
+    }
+
+    protected boolean areOverlapping(Booking existingBooking, Booking requestedBooking) {
+        @NotNull LocalDateTime exStartDate = existingBooking.getStartDate();
+        @NotNull LocalDateTime reqEndDate = requestedBooking.getEndDate();
+        @NotNull LocalDateTime reqStartDate = requestedBooking.getStartDate();
+        @NotNull LocalDateTime exEndDate = existingBooking.getEndDate();
+
+        return (exStartDate.isBefore(reqEndDate) && exStartDate.isAfter(reqStartDate))
+                || (exEndDate.isAfter(reqStartDate) && exEndDate.isBefore(reqEndDate)
+                || (exStartDate.isBefore(reqStartDate) && exEndDate.isAfter(reqEndDate)));
+
     }
 
 
