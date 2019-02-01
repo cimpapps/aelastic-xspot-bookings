@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.concurrent.CompletableFuture.runAsync;
 
@@ -130,11 +131,20 @@ public class BookingServiceImpl implements BookingsService {
         String placeId = t.getPlaceId();
 
         //TODO after date...
-        return bookingRepository.findAllByTableIdAndPlaceId(id, placeId)
+        return findAllByTableAndDates(t, requestedBooking)
                 .filter(existingBooking -> areOverlapping(existingBooking, requestedBooking))
                 .findFirst()
                 .map(b -> false)
                 .orElse(true);
+    }
+
+    private Stream<Booking> findAllByTableAndDates(Table table, Booking booking) {
+        return bookingRepository.findAllByTableIdAndPlaceIdAndEndDateIsAfterAndStartDateIsBeforeAndBookingState(
+                table.getId(),
+                table.getPlaceId(),
+                booking.getStartDate(),
+                booking.getEndDate(),
+                BookingState.CONFIRMED);
     }
 
     protected boolean areOverlapping(Booking existingBooking, Booking requestedBooking) {
