@@ -16,6 +16,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.aelastic.xspot.bookings.models.BookingState.CONFIRMED;
+import static com.aelastic.xspot.bookings.models.BookingState.REQUESTED;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -42,7 +44,8 @@ public class BookingRepoTests {
                 .placeId(UUID.randomUUID().toString())
                 .startDate(time1800)
                 .endDate(time1900)
-                .nrOfPeople(7);
+                .nrOfPeople(7)
+                .bookingState(REQUESTED);
 
         SAVED_BOOKING = bookingRepo.save(BOOKING_BUILDER.build());
     }
@@ -86,7 +89,9 @@ public class BookingRepoTests {
         String placeId = UUID.randomUUID().toString();
         String tableId = UUID.randomUUID().toString();
         Booking booking1 = BOOKING_BUILDER.placeId(placeId)
-                .tableId(tableId).build();
+                .tableId(tableId)
+                .bookingState(CONFIRMED)
+                .build();
         booking1 = bookingRepo.save(booking1);
 
         Booking booking2 = BOOKING_BUILDER.tableId(UUID.randomUUID().toString()).build();
@@ -95,7 +100,12 @@ public class BookingRepoTests {
         Booking booking3 = BOOKING_BUILDER.placeId(UUID.randomUUID().toString()).build();
         booking3 = bookingRepo.save(booking3);
 
-        Stream<Booking> all = bookingRepo.findAllByTableIdAndPlaceId(tableId, placeId);
+        Stream<Booking> all = bookingRepo.findAllByTableIdAndPlaceIdAndEndDateIsAfterAndStartDateIsBeforeAndBookingState(
+                tableId,
+                placeId,
+                booking1.getStartDate().plusMinutes(10),
+                booking1.getEndDate().minusMinutes(10),
+                CONFIRMED);
 
         assertThat(all.collect(Collectors.toList()),
                 both(contains(booking1)).and(not(contains(SAVED_BOOKING, booking2, booking3))));
