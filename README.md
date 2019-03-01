@@ -1,1 +1,0 @@
-# aelastic-xspot-bookings
